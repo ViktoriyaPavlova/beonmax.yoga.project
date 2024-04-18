@@ -1,33 +1,37 @@
 window.addEventListener("DOMContentLoaded", function () {
-  "use strict";
-  let tab = document.querySelectorAll(".info-header-tab"),
-    info = document.querySelector(".info-header"),
-    tabContent = document.querySelectorAll(".info-tabcontent");
+  "use strict"; // событие срабатывает тогда, когда полностью подгузилось ДОМ-дерево
+  let tab = document.querySelectorAll(".info-header-tab"),// доступ к заголовкам табов
+    info = document.querySelector(".info-header"),//доступ к родителю табов
+    tabContent = document.querySelectorAll(".info-tabcontent"); //доступ ко всем отдельным табам
 
-  function hideTabContent(a) {
+
+// функция скрывания табов
+  function hideTabContent(a) { //один технический аргумент а
     for (let i = a; i < tabContent.length; i++) {
-      tabContent[i].classList.remove("show");
-      tabContent[i].classList.add("hide");
+      tabContent[i].classList.remove("show"); //удаляем класс show
+      tabContent[i].classList.add("hide");//добавляем класс hide
     }
   }
 
-  hideTabContent(1);
+  hideTabContent(1); // вызываем функцию, оставляем 1 таб видимым
 
-  function showTabContent(b) {
-    if (tabContent[b].classList.contains("hide")) {
-      tabContent[b].classList.remove("hide");
-      tabContent[b].classList.add("show");
+  // функция показывания табов
+  function showTabContent(b) { //один технический аргумент в
+    if (tabContent[b].classList.contains("hide")) { //если таб содержит класс hide
+      tabContent[b].classList.remove("hide"); // удаляем класс hide
+      tabContent[b].classList.add("show"); //добавляем класс show
     }
   }
 
+  //вешаем обработчик события на родителя
   info.addEventListener("click", function (event) {
-    let target = event.target;
-    if (target && target.classList.contains("info-header-tab")) {
+    let target = event.target; //текущий элемент
+    if (target && target.classList.contains("info-header-tab")) { //проверяем, что кликнули на нужный элемент
       for (let i = 0; i < tab.length; i++) {
-        if (target == tab[i]) {
-          hideTabContent(0);
-          showTabContent(i);
-          break;
+        if (target == tab[i]) { //если текущий элемент совпадает с табом
+          hideTabContent(0); // прячем все табы
+          showTabContent(i); // показываем совпадающий таб
+          break; //останавливаем цикл
         }
       }
     }
