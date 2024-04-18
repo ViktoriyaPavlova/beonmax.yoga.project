@@ -64,14 +64,13 @@ window.addEventListener("DOMContentLoaded", function () {
 
   // функция, которая делает статичную верстку динамичной
   function setClock(id, endtime) {
-    let timer = document.getElementById(id),// получаем элемент таймер
+    let timer = document.getElementById(id), // получаем элемент таймер
       hours = timer.querySelector(".hours"),
       minutes = timer.querySelector(".minutes"),
       seconds = timer.querySelector(".seconds"),
       timeInterval = setInterval(updateClock, 1000); // добавляем интервал в 1 секунду
 
-
-      // функция, обновляющая таймер каждую секунду
+    // функция, обновляющая таймер каждую секунду
     function updateClock() {
       let t = getTimeRemaining(endtime);
 
@@ -85,7 +84,8 @@ window.addEventListener("DOMContentLoaded", function () {
       minutes.textContent = addZero(t.minutes); // количество оставшихся минут
       seconds.textContent = addZero(t.seconds); // количество оставшихся минут
 
-      if (t.total <= 0) { //условие, при котором таймер остановится
+      if (t.total <= 0) {
+        //условие, при котором таймер остановится
         clearInterval(timeInterval);
         hours.textContent = "00";
         minutes.textContent = "00";
@@ -95,4 +95,24 @@ window.addEventListener("DOMContentLoaded", function () {
   }
 
   setClock("timer", deadline); //вызываем функцию динамической отрисовки таймера
+
+  // Modal (модальное окно)
+
+  let more = document.querySelector(".more"), // доступ к кнопке "узнать больше"
+    overlay = document.querySelector(".overlay"), // доступ к модальному окну
+    close = document.querySelector(".popup-close"); // доступ к кнопке закрытия модального окна
+
+  more.addEventListener("click", function () {
+    // обработчки события при клике на кнопку
+    overlay.style.display = "block"; // модальное окно становится блочным
+    this.classList.add("more-splash"); // через this обращаемся к кнопке, добавляем класс появления модалки
+    document.body.style.overflow = "hidden"; // при показе модалки запрещаем прокрутку страницы
+  });
+
+  close.addEventListener("click", function () {
+    // клик по кнопке, закрывающей модалку
+    overlay.style.display = "none"; // убираем стили
+    more.classList.remove("more-splash"); // показ модального окна, обращаемся к кнопке more
+    document.body.style.overflow = ""; // отменяем запрет на прокрутку страницы при закрытии модального окна
+  });
 });
