@@ -115,4 +115,55 @@ window.addEventListener("DOMContentLoaded", function () {
     more.classList.remove("more-splash"); // показ модального окна, обращаемся к кнопке more
     document.body.style.overflow = ""; // отменяем запрет на прокрутку страницы при закрытии модального окна
   });
+
+  // Form
+
+  //объект с различными состояниями нашего запроса
+  let message = {
+    loading: "Загрузка...",
+    success: "Спасибо! Скоро мы с вами свяжемся!",
+    failure: "Что-то пошло не так...",
+  };
+
+  let form = document.querySelector(".main-form"), //получаем доступ к форме обратной связи в модальном окне
+    input = form.getElementsByTagName("input"), //получаем доступ к инпутам
+    statusMessage = document.createElement("div"); //создаем элемент для оповещения пользователя
+
+  statusMessage.classList.add("status"); //добавляем оповещению новый класс
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault(); //отмена перезагрузки страницы и отправки запроса на сервер
+    form.appendChild(statusMessage); //добавляем див со статусом
+
+    let request = new XMLHttpRequest(); //новый конструктор
+    request.open("POST", "server.php"); //настройка для отправки запроса
+    request.setRequestHeader("Content-type", "application/json; charset=utf-8"); //настройка заголовка запроса
+
+    let formData = new FormData(form); //получение всех данных, которые ввел пользователь
+
+    //превращаем formData в JSON
+    let obj = {}; //создаем новый объект
+    formData.forEach(function (value, key) {
+      obj[key] = value; //вставляем все данные из formData в этот объект
+    });
+    let json = JSON.stringify(obj); //переводим данные в формат JSON с помощью метода stringify
+
+    request.send(json); //отправка данных на сервер
+
+    //наблюдение за изменениями состояния нашего запроса
+    request.addEventListener("readystatechange", function () {
+      if (request.readyState < 4) {
+        statusMessage.innerHTML = message.loading;
+      } else if (request.readyState === 4 && request.status == 200) {
+        statusMessage.innerHTML = message.success;
+      } else {
+        statusMessage.innerHTML = message.failure;
+      }
+    });
+
+    //очистка всех импутов после отправки запросов на сервер
+    for (let i = 0; i < input.length; i++) {
+      input[i].value = "";
+    }
+  });
 });
