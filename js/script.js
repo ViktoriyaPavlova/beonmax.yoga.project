@@ -187,7 +187,7 @@ window.addEventListener("DOMContentLoaded", function () {
       slideIndex = slides.length;
     } //если мы листаем слайдер назад, то возвращаемся к последнему слайду
 
-    //прячем все слайды 
+    //прячем все слайды
     slides.forEach((item) => (item.style.display = "none"));
     //либо так
     // for (let i = 0; i < slides.length; i++) {
@@ -201,7 +201,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
   //функция, которая переходит к следующему слайду
   function plusSlides(n) {
-    showSlides((slideIndex += n));//вызываем здесь же первую функцию для показа текущего слайда
+    showSlides((slideIndex += n)); //вызываем здесь же первую функцию для показа текущего слайда
   }
 
   //текущий слайд, т.е.тыкаем на 4 точку, показ 4 слайда
@@ -228,6 +228,54 @@ window.addEventListener("DOMContentLoaded", function () {
       ) {
         currentSlide(i); //вызываем функцию показа текущего слайда
       }
+    }
+  });
+
+  // Calculator
+
+  let persons = document.querySelectorAll(".counter-block-input")[0], // 1-ый инпут, куда пользователь вводит количество людей
+    restDays = document.querySelectorAll(".counter-block-input")[1], //2-ой инпут, куда пользователь вводит количество дней
+    place = document.getElementById("select"), //место, где будут отдыхать люди
+    totalValue = document.getElementById("total"), //общая стоимость поездки
+    personsSum = 0, // количество людей
+    daysSum = 0, // количество дней
+    total = 0; //общая стоимость
+
+  totalValue.innerHTML = 0; //обнуляем значение общей стоимости
+
+//работаем с 1-ым инпутом
+  persons.addEventListener("change", function () {
+    personsSum = +this.value; //записываем количество людей, что ввел пользователь
+    total = (daysSum + personsSum) * 4000; //производим расчет по формуле
+
+    //если одно поле пустое, то общая стоимость равна 0
+    if (restDays.value == "" || persons.value == "") {
+      totalValue.innerHTML = 0;
+    } else {
+      totalValue.innerHTML = total;
+    }
+  });
+
+  //работаем со 2-ым инпутом
+  restDays.addEventListener("change", function () {
+    daysSum = +this.value;
+    total = (daysSum + personsSum) * 4000;
+
+    //если поле инпута пустое, то общая стоимость равна 0
+    if (restDays.value == "" || persons.value == "") {
+      totalValue.innerHTML = 0;
+    } else {
+      totalValue.innerHTML = total;
+    }
+  });
+
+  //работаем с селектором с выбором мест отдыха
+  place.addEventListener("change", function () {
+    if (restDays.value == "" || persons.value == "") {
+      totalValue.innerHTML = 0;
+    } else {
+      let a = total;
+      totalValue.innerHTML = a * this.options[this.selectedIndex].value; //значение из HTML кода, соответствующее определенному элементу option
     }
   });
 });
