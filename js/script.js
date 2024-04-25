@@ -166,4 +166,68 @@ window.addEventListener("DOMContentLoaded", function () {
       input[i].value = "";
     }
   });
+
+  // Slider
+
+  let slideIndex = 1, // Переменная, отвечающая за слайд, который показывается на странице в текущий момент
+    slides = document.querySelectorAll(".slider-item"), //все слайды
+    prev = document.querySelector(".prev"), //стрелка назад
+    next = document.querySelector(".next"), //стрелка вперед
+    dotsWrap = document.querySelector(".slider-dots"), //обертка для точек
+    dots = document.querySelectorAll(".dot"); //точки
+
+  showSlides(slideIndex); //вызов функции до ее объявления, т.к. function declaration
+
+  //функция показа слайда, который мы передаем
+  function showSlides(n) {
+    if (n > slides.length) {
+      slideIndex = 1; //если слайды в карусели закончились, возвращаемся к первому слайду
+    }
+    if (n < 1) {
+      slideIndex = slides.length;
+    } //если мы листаем слайдер назад, то возвращаемся к последнему слайду
+
+    //прячем все слайды 
+    slides.forEach((item) => (item.style.display = "none"));
+    //либо так
+    // for (let i = 0; i < slides.length; i++) {
+    //     slides[i].style.display = 'none';
+    // }
+    dots.forEach((item) => item.classList.remove("dot-active")); //делаем точки неактивными
+
+    slides[slideIndex - 1].style.display = "block"; //показываем тот слайд, который нам нужен (нумерация с нуля)
+    dots[slideIndex - 1].classList.add("dot-active"); //показываем соответствующую точку
+  }
+
+  //функция, которая переходит к следующему слайду
+  function plusSlides(n) {
+    showSlides((slideIndex += n));//вызываем здесь же первую функцию для показа текущего слайда
+  }
+
+  //текущий слайд, т.е.тыкаем на 4 точку, показ 4 слайда
+  function currentSlide(n) {
+    showSlides((slideIndex = n));
+  }
+
+  //реализация стрелки "назад"
+  prev.addEventListener("click", function () {
+    plusSlides(-1);
+  });
+
+  //реализация стрелки "вперед"
+  next.addEventListener("click", function () {
+    plusSlides(1);
+  });
+
+  //реализация кликабельности точек
+  dotsWrap.addEventListener("click", function (event) {
+    for (let i = 0; i < dots.length + 1; i++) {
+      if (
+        event.target.classList.contains("dot") && //если текущий элемент - точка
+        event.target == dots[i - 1] // и номер точки
+      ) {
+        currentSlide(i); //вызываем функцию показа текущего слайда
+      }
+    }
+  });
 });
